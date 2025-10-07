@@ -1,4 +1,4 @@
-# This is our own implementation of a modern Convolution Neuron Net trained to identify images of fasthion clothing
+# This is my implementation of a modern Convolution Neural Net trained to identify images of fashion clothing
 
 Fashion clothing included bags, sneakers, shirts, tshirts and many more categories.
 The model has been trained on 10,000 images and works with 98% accuracy while inferencing.
