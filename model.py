@@ -7,32 +7,13 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import streamlit as st
 import time
-from pyngrok import ngrok
 import sys
 
 st.set_page_config(page_title="Fashion MNIST Predictor", layout="wide")
 
-try:
-    # Check for existing tunnels
-    tunnels = ngrok.get_tunnels()
-    if tunnels:
-        # Use the first existing tunnel
-        public_url = tunnels[0].public_url
-    else:
-        # Create a new tunnel if none exist
-        ngrok.set_auth_token('2mQ1G22ZRGZAsaGAQVcRaiYF5zd_5RYKJf9b9bsMeDJvtjfmi')
-        public_url = ngrok.connect(8501)
-    
-    print(f"Public URL: {public_url}", file=sys.stderr)
-    # st.success(f"Ngrok tunnel created: {public_url}")
-except Exception as e:
-    st.error(f"An error occurred setting up ngrok: {e}")
-
-
-
 # importing our model architecture and model
 from model_class import f_cnn
-test_model = torch.load('Fashion_mnist_model.pth',map_location=torch.device('cpu'))
+test_model = torch.load('Fashion_mnist_model.pth',map_location=torch.device('cpu'),weights_only=False)
 
 # importing our dataset
 from data import test_data
@@ -64,7 +45,7 @@ st.subheader('This model takes an image of a piece of clothing as its input and 
 st.sidebar.subheader('We got nothing to show here right now....')
 st.sidebar.text('Stay tuned for more exciting stuff coming soon!!')
 
-st.logo('White_Logo.png')
+st.logo('resources/White_Logo.png')
 
 if st.button('Hit me to fire up the model'):
     st.session_state.button_clicked = True
@@ -85,11 +66,7 @@ if st.session_state.button_clicked:
 
     st.write(f'The original image is a {labels_map[test_data[num_test][1]]}!\n')
 
-    fig,ax = plt.subplots()
-    ax.imshow(test_data[num_test][0].squeeze())
-    ax.axis('off')
-    st.pyplot(fig)
-
+    st.image(test_data[num_test][0].squeeze().numpy(), width=500)
 
     # get model prediction
     with torch.no_grad():
